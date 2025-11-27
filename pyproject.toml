@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trackbear-cli"
+requires-python = ">=3.10"
+description = "A CLI for TrackBear written in Python"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { email = "preocts@preocts.com", name = "Preocts" },
+]
+maintainers = []
+keywords = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+dynamic = ["version"]
+dependencies = []
+
+[dependency-groups]
+format = [
+    "black",
+    "isort",
+]
+lint = [
+    "flake8",
+    "flake8-pep585",
+    "mypy",
+]
+dev = [
+    "pytest",
+    "pytest-randomly",
+    "coverage",
+]
+
+[project.urls]
+homepage = "https://github.com/Preocts/trackbear-cli"
+
+# [project.scripts]
+# python-src-example = "trackbear_cli.sample:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.black]
+line-length = 100
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_incomplete_defs = false
+disallow_untyped_defs = false
+warn_unused_ignores = false
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "\\.\\.\\.",
+    "if TYPE_CHECKING:",
+]

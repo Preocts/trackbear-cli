@@ -1,0 +1,15 @@
+*egg-info/
+*.pyc
+
+build
+dist
+
+.vscode
+.nox
+htmlcov
+.coverage*
+coverage.*
+
+.venv*
+temp_*
+.env
