@@ -9,4 +9,3 @@
 
 - [Contributing Guide and Developer Setup Guide](./CONTRIBUTING.md)
 - [License: MIT](./LICENSE)
-
