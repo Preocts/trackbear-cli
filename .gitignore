@@ -13,3 +13,6 @@ coverage.*
 .venv*
 temp_*
 .env
+
+# TrackBear CLI configuration files
+trackbear-cli.*
