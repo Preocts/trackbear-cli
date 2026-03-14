@@ -86,3 +86,13 @@ def test_save() -> None:
     loadconfig.load()
 
     assert loadconfig.auth_token == MOCK_MODIFIED_CONFIG["auth_token"]
+
+
+@pytest.mark.usefixtures("filepath")
+def test_get_config_returns_same_object() -> None:
+    """Test that get_config() creates a new config and returns the same config in future calls."""
+
+    first_config = config.get_config()
+    second_config = config.get_config()
+
+    assert first_config is second_config
