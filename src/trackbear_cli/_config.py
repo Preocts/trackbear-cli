@@ -43,6 +43,7 @@ class Config:
             msg = "The TrackBear Auth token must be a string value."
             raise ValueError(msg)
 
+    # TODO: This should eventually know if state has changed and noop whenever possible
     def load(self) -> None:
         """Load the configuration from disk."""
         if not _FILEPATH.exists():
