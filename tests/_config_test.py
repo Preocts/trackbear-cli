@@ -9,8 +9,11 @@ import pytest
 from trackbear_cli import _config as config
 
 MOCK_CONFIG_NAME = "mockconfig.json"
-MOCK_CONFIG_MAP = {
+MOCK_DEFAULT_CONFIG = {
     "auth_token": "this_is_a_mock_token",
+}
+MOCK_MODIFIED_CONFIG = {
+    "auth_token": "1egg3wheat2sugar3milk",
 }
 
 
@@ -18,7 +21,7 @@ MOCK_CONFIG_MAP = {
 def filepath(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> pathlib.Path:
     """Create a mock config to use for tests and patches that path into _config.py"""
     _filepath = tmp_path / MOCK_CONFIG_NAME
-    json.dump(MOCK_CONFIG_MAP, _filepath.open("w", encoding="utf-8"), indent=2)
+    json.dump(MOCK_DEFAULT_CONFIG, _filepath.open("w", encoding="utf-8"), indent=2)
 
     monkeypatch.setattr(config, "_FILEPATH", _filepath)
 
@@ -50,7 +53,7 @@ def test_validation_of_auth_token_string(
     tmp_path: pathlib.Path,
 ) -> None:
     """Loading without an existing file should create that file."""
-    badconfig = copy.deepcopy(MOCK_CONFIG_MAP)
+    badconfig = copy.deepcopy(MOCK_DEFAULT_CONFIG)
     badconfig["auth_token"] = 123  # type: ignore
     filepath = tmp_path / MOCK_CONFIG_NAME
     json.dump(badconfig, filepath.open("w", encoding="utf-8"), indent=2)
@@ -68,6 +71,18 @@ def test_load() -> None:
 
     newconfig.load()
 
-    for key, value in MOCK_CONFIG_MAP.items():
+    for key, value in MOCK_DEFAULT_CONFIG.items():
         configattr = getattr(newconfig, key)
         assert configattr == value
+
+
+@pytest.mark.usefixtures("filepath")
+def test_save() -> None:
+    """Test saving values to file."""
+    saveconfig = config.Config(**MOCK_MODIFIED_CONFIG)
+    loadconfig = config.Config()
+
+    saveconfig.save()
+    loadconfig.load()
+
+    assert loadconfig.auth_token == MOCK_MODIFIED_CONFIG["auth_token"]

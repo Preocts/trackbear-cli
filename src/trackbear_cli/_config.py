@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import dataclasses
-import enum
 import json
 import logging
 import pathlib
@@ -17,16 +16,11 @@ _DEFAULT_CONFIG = {
 logger = logging.getLogger("trackbear-cli")
 
 
-class _ConfigFields(str, enum.Enum):
-    AUTHTOKEN = "auth_token"
-
-
 @dataclasses.dataclass(slots=True)
 class Config:
     """Manage a stateful configuration."""
 
     auth_token: str = ""
-    fields: type[_ConfigFields] = dataclasses.field(default=_ConfigFields, init=False)
 
     def __post_init__(self) -> None:
         self._validate_values()
@@ -45,8 +39,13 @@ class Config:
 
         config_dict = json.load(_FILEPATH.open())
 
-        for field in self.fields:
-            attr_name = _ConfigFields(field).value
-            setattr(self, attr_name, config_dict.get(attr_name, ""))
+        for key in _DEFAULT_CONFIG.keys():
+            setattr(self, key, config_dict[key])
 
         self._validate_values()
+
+    def save(self) -> None:
+        """Save the configuration to disk."""
+        self._validate_values()
+
+        json.dump(self, _FILEPATH.open("w", encoding="utf-8"), indent=2, default=dataclasses.asdict)
