@@ -13,19 +13,19 @@ _DEFAULT_CONFIG = {
     "auth_token": "",
 }
 
-_CONFIG: Config | None = None
+_config: Config | None = None
 
 logger = logging.getLogger("trackbear-cli")
 
 
 def get_config() -> Config:
     """Get a shared config. Not thread safe."""
-    global _CONFIG
+    global _config
 
-    if _CONFIG is None:
-        _CONFIG = Config()
+    if _config is None:
+        _config = Config()
 
-    return _CONFIG
+    return _config
 
 
 @dataclasses.dataclass(slots=True)
