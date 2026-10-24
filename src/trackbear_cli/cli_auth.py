@@ -48,7 +48,7 @@ def _save(token: str) -> bool:
         config.auth_token = token
         config.save()
 
-    except (ValueError, OSError):
+    except ValueError, OSError:
         return False
 
     return True
@@ -84,7 +84,7 @@ def _clear() -> bool:
         config.auth_token = _BLANK_VALUE
         config.save()
 
-    except (ValueError, OSError):
+    except ValueError, OSError:
         return False
 
     return True
