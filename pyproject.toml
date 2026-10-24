@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "trackbear-cli"
-requires-python = ">=3.10"
+requires-python = ">=3.15"
 description = "A CLI for TrackBear written in Python"
 readme = "README.md"
 license = "MIT"
