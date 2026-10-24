@@ -88,7 +88,6 @@ def run_tests_with_coverage(session: nox.Session) -> None:
     else:
         coverage("run", "--module", "pytest", *session.posargs)
         coverage("report", "--show-missing")
-        coverage("html")
 
 
 @nox.session(name="combine", python=PYTHON_VERSION)
@@ -100,7 +99,6 @@ def combine_coverage(session: nox.Session) -> None:
 
     coverage("combine")
     coverage("report", "--show-missing")
-    coverage("html")
     coverage("json")
 
 

@@ -52,9 +52,6 @@ manually recreated. These instructions will not cover those cases.
 
 ### Developer Install
 
-This builds the `/.venv`, installs the editable package, and installs
-pre-commit.
-
 ```console
 uvx nox -s dev
 ```
