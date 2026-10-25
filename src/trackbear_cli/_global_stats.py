@@ -4,10 +4,6 @@ import dataclasses
 import datetime
 from typing import TYPE_CHECKING
 
-from trackbear_api import TrackBearClient
-
-from trackbear_cli._config import get_config
-
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from typing import Protocol
@@ -61,27 +57,3 @@ def _pull_global_stats(
     }
 
     return parsed_results
-
-
-def main() -> None:  # pragma: no cover
-    config = get_config()
-    config.load()
-
-    client = TrackBearClient("trackbear_cli_testing", api_token=config.auth_token)
-
-    thirty_days = datetime.datetime.now() - datetime.timedelta(days=30)
-    thirty_days_since = thirty_days.strftime("%Y-%m-%d")
-
-    stats = _pull_global_stats(client.stat)
-    for key, value in stats.items():
-        print(f"{key} : {value}")
-
-    print()
-
-    stats = _pull_global_stats(client.stat, thirty_days_since)
-    for key, value in stats.items():
-        print(f"{key} : {value}")
-
-
-if __name__ == "__main__":
-    main()
