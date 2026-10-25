@@ -7,7 +7,11 @@ from trackbear_api import TrackBearClient
 _APP_NAME = "trackbear-cli"
 
 
-def pull_global_stats(since: str | None = None, until: str | None = None) -> dict[str, str]:
+def pull_global_stats(
+    client: TrackBearClient,
+    since: str | None = None,
+    until: str | None = None,
+) -> dict[str, str]:
     """Pull global stats from TrackBear API.
 
     Args:
@@ -17,8 +21,6 @@ def pull_global_stats(since: str | None = None, until: str | None = None) -> dic
     Raises:
         ValueError: When no results are returned from the API.
     """
-    client = TrackBearClient(_APP_NAME)
-
     results = client.stat.list(start_date=since, end_date=until)
 
     if not results:
@@ -52,17 +54,19 @@ def pull_global_stats(since: str | None = None, until: str | None = None) -> dic
 
 
 def main() -> None:
+    client = TrackBearClient(_APP_NAME)
+
     thirty_days = datetime.datetime.now() - datetime.timedelta(days=30)
     thirty_days_since = thirty_days.strftime("%Y-%m-%d")
 
-    stats = pull_global_stats()
+    stats = pull_global_stats(client)
     for key, value in stats.items():
         if value:
             print(f"{key} : {value}")
 
     print("\n")
 
-    stats = pull_global_stats(thirty_days_since)
+    stats = pull_global_stats(client, thirty_days_since)
     for key, value in stats.items():
         if value:
             print(f"{key} : {value}")
