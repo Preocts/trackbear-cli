@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-import cyclopts
 import datetime
+
+import cyclopts
 from trackbear_api import TrackBearClient
 
 from trackbear_cli import _global_stats

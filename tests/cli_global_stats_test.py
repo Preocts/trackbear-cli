@@ -4,11 +4,11 @@ import json
 import pathlib
 
 import pytest
-
-from trackbear_cli import _global_stats
-from trackbear_cli import _config as config
-from trackbear_cli import cli_global_stats
 from trackbear_api import TrackBearClient
+
+from trackbear_cli import _config as config
+from trackbear_cli import _global_stats
+from trackbear_cli import cli_global_stats
 
 MOCK_CONFIG_NAME = "mockconfig.json"
 MOCK_DEFAULT_CONFIG = {
@@ -94,8 +94,8 @@ def test_total_success(
     ),
 )
 def test_total_invalid_date(
-    start_date: str | None,
-    end_date: str | None,
+    start_date: str,
+    end_date: str,
     capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
