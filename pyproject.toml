@@ -21,6 +21,7 @@ classifiers = [
 dynamic = ["version"]
 dependencies = [
     "cyclopts>=4.9.0",
+    "trackbear-api>=0.0.15",
 ]
 
 [dependency-groups]
