@@ -35,7 +35,6 @@ def total(start_date: str | None = None, end_date: str | None = None) -> int:
         return 1
 
     config = get_config()
-    config.load()
 
     client = TrackBearClient("TBD", api_token=config.auth_token)
 

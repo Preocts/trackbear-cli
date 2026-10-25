@@ -19,7 +19,6 @@ def save(token: str) -> bool:
     """
     config = get_config()
     try:
-        config.load()
         config.auth_token = token
         config.save()
 
@@ -39,7 +38,6 @@ def clear() -> bool:
     config = get_config()
 
     try:
-        config.load()
         config.auth_token = _BLANK_VALUE
         config.save()
 

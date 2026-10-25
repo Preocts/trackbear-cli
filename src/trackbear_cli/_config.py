@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import dataclasses
+import functools
 import json
 import logging
 import pathlib
@@ -13,19 +14,15 @@ _DEFAULT_CONFIG = {
     "auth_token": "",
 }
 
-_config: Config | None = None
-
 logger = logging.getLogger("trackbear-cli")
 
 
+@functools.cache
 def get_config() -> Config:
-    """Get a shared config. Not thread safe."""
-    global _config
-
-    if _config is None:
-        _config = Config()
-
-    return _config
+    """Get a loaded config. Cached response."""
+    config = Config()
+    config.load()
+    return config
 
 
 @dataclasses.dataclass(slots=True)
