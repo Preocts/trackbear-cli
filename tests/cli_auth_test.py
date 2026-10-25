@@ -5,6 +5,7 @@ import pathlib
 
 import pytest
 
+from trackbear_cli import _auth
 from trackbear_cli import _config as config
 from trackbear_cli import cli_auth
 
@@ -30,7 +31,7 @@ def test_save_cli_success(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a success."""
-    monkeypatch.setattr(cli_auth, "_save", lambda token: True)
+    monkeypatch.setattr(_auth, "save", lambda token: True)
 
     result = cli_auth.commands("save thisismebreathing", result_action="return_value")
 
@@ -43,7 +44,7 @@ def test_save_cli_failure(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a failure."""
-    monkeypatch.setattr(cli_auth, "_save", lambda token: False)
+    monkeypatch.setattr(_auth, "save", lambda token: False)
 
     result = cli_auth.commands("save thisismebreathing", result_action="return_value")
 
@@ -51,26 +52,12 @@ def test_save_cli_failure(
     assert capsys.readouterr().out == "Failed to save token.\n"
 
 
-@pytest.mark.parametrize(
-    "token,expected",
-    (
-        ("abc", True),
-        (123, False),
-    ),
-)
-def test_save(token: str, expected: bool) -> None:
-    """Test the logic of the save command."""
-    result = cli_auth._save(token)
-
-    assert result is expected
-
-
 def test_clear_cli_success(
     capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a success."""
-    monkeypatch.setattr(cli_auth, "_clear", lambda: True)
+    monkeypatch.setattr(_auth, "clear", lambda: True)
 
     result = cli_auth.commands("clear", result_action="return_value")
 
@@ -83,26 +70,9 @@ def test_clear_cli_failure(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a failure."""
-    monkeypatch.setattr(cli_auth, "_clear", lambda: False)
+    monkeypatch.setattr(_auth, "clear", lambda: False)
 
     result = cli_auth.commands("clear", result_action="return_value")
 
     assert result == 1
     assert capsys.readouterr().out == "Unable to clear token.\n"
-
-
-def test_clear_successful() -> None:
-    """Test a successful clear command logic."""
-    result = cli_auth._clear()
-
-    assert result is True
-
-
-def test_clear_failure(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test a failed clear command logic."""
-    # Set the default blank value to an invalid non-string to trigger an exception.
-    monkeypatch.setattr(cli_auth, "_BLANK_VALUE", 1234)
-
-    result = cli_auth._clear()
-
-    assert result is False

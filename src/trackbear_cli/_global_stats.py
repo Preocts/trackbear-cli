@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 
 from trackbear_api import TrackBearClient
 
+from trackbear_cli._config import get_config
+
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from typing import Protocol
@@ -20,7 +22,7 @@ if TYPE_CHECKING:
         ) -> Sequence[Stat]: ...
 
 
-def pull_global_stats(
+def _pull_global_stats(
     client: _StatClient,
     since: str | None = None,
     until: str | None = None,
@@ -62,18 +64,21 @@ def pull_global_stats(
 
 
 def main() -> None:  # pragma: no cover
-    client = TrackBearClient("trackbear_cli_testing")
+    config = get_config()
+    config.load()
+
+    client = TrackBearClient("trackbear_cli_testing", api_token=config.auth_token)
 
     thirty_days = datetime.datetime.now() - datetime.timedelta(days=30)
     thirty_days_since = thirty_days.strftime("%Y-%m-%d")
 
-    stats = pull_global_stats(client.stat)
+    stats = _pull_global_stats(client.stat)
     for key, value in stats.items():
         print(f"{key} : {value}")
 
     print()
 
-    stats = pull_global_stats(client.stat, thirty_days_since)
+    stats = _pull_global_stats(client.stat, thirty_days_since)
     for key, value in stats.items():
         print(f"{key} : {value}")
 
