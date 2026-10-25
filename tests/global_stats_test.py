@@ -41,14 +41,14 @@ def test_pull_global_stats_default_args() -> None:
     assert isinstance(result, dict)
     assert result["first_entry"] == "2026-11-01"
     assert result["last_entry"] == "2026-11-30"
-    assert result["total_days"] == 30
-    assert result["total_entries"] == 2
-    assert result["total_word"] == 20
-    assert result["total_time"] == 0
-    assert result["total_page"] == 0
-    assert result["total_chapter"] == 0
-    assert result["total_scene"] == 0
-    assert result["total_line"] == 0
+    assert result["days"] == "30"
+    assert result["entries"] == "2"
+    assert result["word"] == "20"
+    assert result["time"] == "0"
+    assert result["page"] == "0"
+    assert result["chapter"] == "0"
+    assert result["scene"] == "0"
+    assert result["line"] == "0"
 
 
 def test_pull_global_stats_custom_args() -> None:

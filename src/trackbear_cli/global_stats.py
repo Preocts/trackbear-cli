@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import datetime
 from typing import TYPE_CHECKING
 
@@ -17,9 +18,6 @@ if TYPE_CHECKING:
             start_date: str | None = None,
             end_date: str | None = None,
         ) -> Sequence[Stat]: ...
-
-
-_APP_NAME = "trackbear-cli"
 
 
 def pull_global_stats(
@@ -44,47 +42,40 @@ def pull_global_stats(
     first_date = datetime.date.fromisoformat(results[0].date)
     last_date = datetime.date.fromisoformat(results[-1].date)
 
-    parsed_results: dict[str, str | int] = {
-        "first_entry": results[0].date,
-        "last_entry": results[-1].date,
-        "total_days": (last_date - first_date).days + 1,
-        "total_entries": len(results),
-        "total_word": 0,
-        "total_time": 0,
-        "total_page": 0,
-        "total_chapter": 0,
-        "total_scene": 0,
-        "total_line": 0,
-    }
+    balance = {key: 0 for key in dataclasses.asdict(results[0].counts).keys()}
 
     for result in results:
-        parsed_results["total_word"] += result.counts.word
-        parsed_results["total_time"] += result.counts.time
-        parsed_results["total_page"] += result.counts.page
-        parsed_results["total_chapter"] += result.counts.chapter
-        parsed_results["total_scene"] += result.counts.scene
-        parsed_results["total_line"] += result.counts.line
+        for key in balance.keys():
+            balance[key] += getattr(result.counts, key)
+
+    parsed_results = {
+        "since": since if since is not None else results[0].date,
+        "until": until if until is not None else results[-1].date,
+        "first_entry": results[0].date,
+        "last_entry": results[-1].date,
+        "days": str((last_date - first_date).days + 1),
+        "entries": str(len(results)),
+        **{k: str(v) for k, v in balance.items()},
+    }
 
     return parsed_results
 
 
-def main() -> None:
-    client = TrackBearClient(_APP_NAME)
+def main() -> None:  # pragma: no cover
+    client = TrackBearClient("trackbear_cli_testing")
 
     thirty_days = datetime.datetime.now() - datetime.timedelta(days=30)
     thirty_days_since = thirty_days.strftime("%Y-%m-%d")
 
     stats = pull_global_stats(client.stat)
     for key, value in stats.items():
-        if value:
-            print(f"{key} : {value}")
+        print(f"{key} : {value}")
 
     print()
 
     stats = pull_global_stats(client.stat, thirty_days_since)
     for key, value in stats.items():
-        if value:
-            print(f"{key} : {value}")
+        print(f"{key} : {value}")
 
 
 if __name__ == "__main__":
