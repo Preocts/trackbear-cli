@@ -1,14 +1,29 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 
 from trackbear_api import TrackBearClient
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+    from typing import Protocol
+
+    from trackbear_api.models import Stat
+
+    class _StatClient(Protocol):
+        def list(
+            self,
+            start_date: str | None = None,
+            end_date: str | None = None,
+        ) -> Sequence[Stat]: ...
+
 
 _APP_NAME = "trackbear-cli"
 
 
 def pull_global_stats(
-    client: TrackBearClient,
+    client: _StatClient,
     since: str | None = None,
     until: str | None = None,
 ) -> dict[str, str]:
@@ -21,7 +36,7 @@ def pull_global_stats(
     Raises:
         ValueError: When no results are returned from the API.
     """
-    results = client.stat.list(start_date=since, end_date=until)
+    results = client.list(start_date=since, end_date=until)
 
     if not results:
         raise ValueError("No results for global stats returned.")
@@ -59,14 +74,14 @@ def main() -> None:
     thirty_days = datetime.datetime.now() - datetime.timedelta(days=30)
     thirty_days_since = thirty_days.strftime("%Y-%m-%d")
 
-    stats = pull_global_stats(client)
+    stats = pull_global_stats(client.stat)
     for key, value in stats.items():
         if value:
             print(f"{key} : {value}")
 
-    print("\n")
+    print()
 
-    stats = pull_global_stats(client, thirty_days_since)
+    stats = pull_global_stats(client.stat, thirty_days_since)
     for key, value in stats.items():
         if value:
             print(f"{key} : {value}")
