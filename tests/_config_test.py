@@ -6,26 +6,9 @@ import pathlib
 
 import pytest
 
+from tests.conftest import MOCK_CONFIG_NAME
+from tests.conftest import MOCK_DEFAULT_CONFIG
 from trackbear_cli import _config as config
-
-MOCK_CONFIG_NAME = "mockconfig.json"
-MOCK_DEFAULT_CONFIG = {
-    "auth_token": "this_is_a_mock_token",
-}
-MOCK_MODIFIED_CONFIG = {
-    "auth_token": "1egg3wheat2sugar3milk",
-}
-
-
-@pytest.fixture
-def filepath(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> pathlib.Path:
-    """Create a mock config to use for tests and patches that path into _config.py"""
-    _filepath = tmp_path / MOCK_CONFIG_NAME
-    json.dump(MOCK_DEFAULT_CONFIG, _filepath.open("w", encoding="utf-8"), indent=2)
-
-    monkeypatch.setattr(config, "_FILEPATH", _filepath)
-
-    return _filepath
 
 
 def test_load_creates_file(
@@ -34,7 +17,7 @@ def test_load_creates_file(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """Loading without an existing file should create that file."""
-    filepath = tmp_path / MOCK_CONFIG_NAME
+    filepath = tmp_path / (MOCK_CONFIG_NAME + ".new")
     assert not filepath.exists()
 
     monkeypatch.setattr(config, "_FILEPATH", filepath)
@@ -79,13 +62,17 @@ def test_load() -> None:
 @pytest.mark.usefixtures("filepath")
 def test_save() -> None:
     """Test saving values to file."""
-    saveconfig = config.Config(**MOCK_MODIFIED_CONFIG)
+    modified_config = {
+        "auth_token": "1egg3wheat2sugar3milk",
+    }
+
+    saveconfig = config.Config(**modified_config)
     loadconfig = config.Config()
 
     saveconfig.save()
     loadconfig.load()
 
-    assert loadconfig.auth_token == MOCK_MODIFIED_CONFIG["auth_token"]
+    assert loadconfig.auth_token == modified_config["auth_token"]
 
 
 @pytest.mark.usefixtures("filepath")

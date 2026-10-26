@@ -1,19 +1,10 @@
 from __future__ import annotations
 
-import json
-import pathlib
-
 import pytest
 from trackbear_api import TrackBearClient
 
-from trackbear_cli import _config as config
 from trackbear_cli import _global_stats
 from trackbear_cli import cli_global_stats
-
-MOCK_CONFIG_NAME = "mockconfig.json"
-MOCK_DEFAULT_CONFIG = {
-    "auth_token": "this_is_a_mock_token",
-}
 
 
 class MockController:
@@ -34,17 +25,6 @@ class MockController:
         self._global_stats_start_date = start_date
         self._global_stats_end_date = end_date
         return self._global_stats
-
-
-@pytest.fixture(autouse=True)
-def filepath(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> pathlib.Path:
-    """Create a mock config to use for tests and patches that path into _config.py"""
-    _filepath = tmp_path / MOCK_CONFIG_NAME
-    json.dump(MOCK_DEFAULT_CONFIG, _filepath.open("w", encoding="utf-8"), indent=2)
-
-    monkeypatch.setattr(config, "_FILEPATH", _filepath)
-
-    return _filepath
 
 
 @pytest.mark.parametrize(
