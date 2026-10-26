@@ -69,7 +69,8 @@ warn_unused_ignores = false
 
 [tool.coverage.run]
 branch = true
-source = ["src/trackbear_cli", "tests"]
+source = [ "src/", "*/site-packages" , "*/src"]
+test = [ "tests/", "*/tests" ]
 
 [tool.coverage.report]
 exclude_lines = [
