@@ -15,11 +15,11 @@ commands = cyclopts.App(name="stats")
 
 @commands.command
 def total(start_date: str | None = None, end_date: str | None = None) -> int:
-    """Fetch total stats for the given dates. Defaults to all time.
+    """Fetch total stats for the given dates.
 
     Args:
-        since (str): YYYY-MM-DD format date of when to start pulling stats (Default: beginning of time)
-        until (str): YYYY-MM-DD format date of when to stop pulling stats (Default: now)
+        start_date (str): YYYY-MM-DD format date of when to start pulling stats (Default: beginning of time)
+        end_date (str): YYYY-MM-DD format date of when to stop pulling stats (Default: now)
 
     Returns:
         int: Value of exit code
