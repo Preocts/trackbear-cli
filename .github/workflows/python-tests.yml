@@ -17,6 +17,7 @@ jobs:
     name: "Set static values"
     runs-on: "ubuntu-slim"
     outputs:
+      windows-version: "windows-latest"
       linux-version: "ubuntu-26.04"
       uv-version: "0.13.4"
 
@@ -33,6 +34,7 @@ jobs:
       matrix:
         os:
           - "${{ needs.set-statics.outputs.linux-version }}"
+          - "${{ needs.set-statics.outputs.windows-version }}"
         python-version:
           - "3.15"
 
