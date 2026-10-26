@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from trackbear_cli import _auth
+from trackbear_cli import auth
 from trackbear_cli import cli_auth
 
 
@@ -11,7 +11,7 @@ def test_save_cli_success(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a success."""
-    monkeypatch.setattr(_auth, "save", lambda token: True)
+    monkeypatch.setattr(auth, "save", lambda token: True)
 
     result = cli_auth.commands("save thisismebreathing", result_action="return_value")
 
@@ -24,7 +24,7 @@ def test_save_cli_failure(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a failure."""
-    monkeypatch.setattr(_auth, "save", lambda token: False)
+    monkeypatch.setattr(auth, "save", lambda token: False)
 
     result = cli_auth.commands("save thisismebreathing", result_action="return_value")
 
@@ -37,7 +37,7 @@ def test_clear_cli_success(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a success."""
-    monkeypatch.setattr(_auth, "clear", lambda: True)
+    monkeypatch.setattr(auth, "clear", lambda: True)
 
     result = cli_auth.commands("clear", result_action="return_value")
 
@@ -50,7 +50,7 @@ def test_clear_cli_failure(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Test the CLI command for a failure."""
-    monkeypatch.setattr(_auth, "clear", lambda: False)
+    monkeypatch.setattr(auth, "clear", lambda: False)
 
     result = cli_auth.commands("clear", result_action="return_value")
 

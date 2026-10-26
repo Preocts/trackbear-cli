@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from trackbear_cli import _auth
+from trackbear_cli import auth
 
 
 @pytest.mark.parametrize(
@@ -14,14 +14,14 @@ from trackbear_cli import _auth
 )
 def test_save(token: str, expected: bool) -> None:
     """Test the logic of the save command."""
-    result = _auth.save(token)
+    result = auth.save(token)
 
     assert result is expected
 
 
 def test_clear_successful() -> None:
     """Test a successful clear command logic."""
-    result = _auth.clear()
+    result = auth.clear()
 
     assert result is True
 
@@ -29,8 +29,8 @@ def test_clear_successful() -> None:
 def test_clear_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     """Test a failed clear command logic."""
     # Set the default blank value to an invalid non-string to trigger an exception.
-    monkeypatch.setattr(_auth, "_BLANK_VALUE", 1234)
+    monkeypatch.setattr(auth, "_BLANK_VALUE", 1234)
 
-    result = _auth.clear()
+    result = auth.clear()
 
     assert result is False

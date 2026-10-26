@@ -5,7 +5,7 @@ import pathlib
 
 import pytest
 
-from trackbear_cli import _config as config
+from trackbear_cli import config as config
 
 MOCK_CONFIG_NAME = "mockconfig.json"
 MOCK_DEFAULT_CONFIG = {
@@ -15,7 +15,7 @@ MOCK_DEFAULT_CONFIG = {
 
 @pytest.fixture(autouse=True)
 def filepath(tmp_path: pathlib.Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    """Create a mock config to use for tests and patches that path into _config.py"""
+    """Create a mock config to use for tests and patches that path into config.py"""
     config.get_config.cache_clear()
     _filepath = tmp_path / MOCK_CONFIG_NAME
     json.dump(MOCK_DEFAULT_CONFIG, _filepath.open("w", encoding="utf-8"), indent=2)

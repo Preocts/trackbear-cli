@@ -8,7 +8,7 @@ import pytest
 
 from tests.conftest import MOCK_CONFIG_NAME
 from tests.conftest import MOCK_DEFAULT_CONFIG
-from trackbear_cli import _config as config
+from trackbear_cli import config as config
 
 
 def test_load_creates_file(

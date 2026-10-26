@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import cyclopts
 
-from trackbear_cli import _auth
+from trackbear_cli import auth
 
 commands = cyclopts.App(name="auth")
 
@@ -22,7 +22,7 @@ def save(token: str) -> int:
     Returns:
         int: Value of exit code
     """
-    if _auth.save(token):
+    if auth.save(token):
         print(f"Saved the new token ***{token[-4:]}")
         return 0
 
@@ -38,7 +38,7 @@ def clear() -> int:
     Returns:
         int: Value of exit code
     """
-    if _auth.clear():
+    if auth.clear():
         print("The token has been cleared.")
         return 0
 

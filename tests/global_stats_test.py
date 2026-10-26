@@ -7,7 +7,7 @@ import pytest
 from trackbear_api.models import Balance
 from trackbear_api.models import Stat
 
-from trackbear_cli import _global_stats
+from trackbear_cli import global_stats
 
 
 class MockStatClient:
@@ -33,7 +33,7 @@ def test_pull_global_stats_default_args() -> None:
     ]
     mock_client = MockStatClient(stats)
 
-    result = _global_stats._pull_global_stats(mock_client)
+    result = global_stats.pull_global_stats(mock_client)
 
     assert len(mock_client._calls) == 1
     assert mock_client._calls[0] == {"start_date": None, "end_date": None}
@@ -64,7 +64,7 @@ def test_pull_global_stats_custom_args() -> None:
     ]
     mock_client = MockStatClient(stats)
 
-    _global_stats._pull_global_stats(mock_client, start_date, end_date)
+    global_stats.pull_global_stats(mock_client, start_date, end_date)
 
     assert len(mock_client._calls) == 1
     assert mock_client._calls[0] == {"start_date": start_date, "end_date": end_date}
@@ -75,4 +75,4 @@ def test_pull_global_stats_no_result() -> None:
     mock_client = MockStatClient([])
 
     with pytest.raises(ValueError, match="No results for global stats returned."):
-        _global_stats._pull_global_stats(mock_client)
+        global_stats.pull_global_stats(mock_client)
