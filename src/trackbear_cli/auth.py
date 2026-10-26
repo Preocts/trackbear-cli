@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ._config import get_config
+from .config import get_config
 
 _BLANK_VALUE = ""
 

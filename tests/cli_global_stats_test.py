@@ -3,8 +3,8 @@ from __future__ import annotations
 import pytest
 from trackbear_api import TrackBearClient
 
-from trackbear_cli import _global_stats
 from trackbear_cli import cli_global_stats
+from trackbear_cli import global_stats
 
 
 class MockController:
@@ -46,7 +46,7 @@ def test_total_success(
 
     mock_controller = MockController({"foo": "bar"})
 
-    monkeypatch.setattr(_global_stats, "_pull_global_stats", mock_controller.pull_global_stats)
+    monkeypatch.setattr(global_stats, "pull_global_stats", mock_controller.pull_global_stats)
 
     command = ["total"]
     if start_date:
@@ -81,7 +81,7 @@ def test_total_invalid_date(
 ) -> None:
     """Handle invalid date being provided from CLI."""
     mock_controller = MockController({"foo": "bar"})
-    monkeypatch.setattr(_global_stats, "_pull_global_stats", mock_controller.pull_global_stats)
+    monkeypatch.setattr(global_stats, "pull_global_stats", mock_controller.pull_global_stats)
 
     command = ["total", "--start-date", start_date, "--end-date", end_date]
 
@@ -97,7 +97,7 @@ def test_total_handles_no_results(
 ) -> None:
     """Handle controller raising ValueError on no results."""
     mock_controller = MockController({"foo": "bar"}, ValueError("boom"))
-    monkeypatch.setattr(_global_stats, "_pull_global_stats", mock_controller.pull_global_stats)
+    monkeypatch.setattr(global_stats, "pull_global_stats", mock_controller.pull_global_stats)
 
     result = cli_global_stats.commands("total", result_action="return_value")
 

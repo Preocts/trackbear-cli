@@ -18,7 +18,7 @@ if TYPE_CHECKING:
         ) -> Sequence[Stat]: ...
 
 
-def _pull_global_stats(
+def pull_global_stats(
     client: _StatClient,
     since: str | None = None,
     until: str | None = None,

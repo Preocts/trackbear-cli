@@ -7,8 +7,8 @@ import datetime
 import cyclopts
 from trackbear_api import TrackBearClient
 
-from trackbear_cli import _global_stats
-from trackbear_cli._config import get_config
+from trackbear_cli import global_stats
+from trackbear_cli.config import get_config
 
 commands = cyclopts.App(name="stats")
 
@@ -39,7 +39,7 @@ def total(start_date: str | None = None, end_date: str | None = None) -> int:
     client = TrackBearClient("TBD", api_token=config.auth_token)
 
     try:
-        result = _global_stats._pull_global_stats(client.stat, start_date, end_date)
+        result = global_stats.pull_global_stats(client.stat, start_date, end_date)
 
     except ValueError:
         print("No results returned.")
